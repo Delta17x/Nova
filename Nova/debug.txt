@@ -1,2 +1,2 @@
-num name = 10
+bool name = true
 print(name)
