@@ -1,2 +1,1 @@
-bool name = true
-print(name)
+bool joemama = true
