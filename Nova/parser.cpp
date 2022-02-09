@@ -28,6 +28,10 @@ void parse1(std::string& src) {
 			}
 			semiLocations.push_back(i);
 		}
+		else if (src[i] == '(') {
+			semiLocations.push_back(i);
+			src.insert(src.begin() + i++, ';');
+		}
 		else if (src[i] == '\n') {
 			semiLocations.push_back(i);
 			src.insert(src.begin() + i++, ';');
@@ -41,20 +45,22 @@ std::string parse2(std::string& src) {
 	auto type = splice(src, 0, semiLocations[0]);
 	std::string actualType = "";
 	auto name = splice(src, semiLocations[0] + 1, semiLocations[1]);
-	auto val = splice(src, semiLocations[2] + 1, semiLocations[3] + 1);
+	std::string val = "";
+	if (src[semiLocations[1]] + 2 == '=')
+		val = splice(src, semiLocations[2] + 1, semiLocations[3] + 1);
+	else if (src[semiLocations[1]] + 2 == '(') { // function
+
+	}
 	if (type == "num") {
-		actualType = "double ";
+		actualType = "double";
 	}
 	if (type == "str") {
-		actualType = "std::string ";
+		actualType = "std::string";
 	}
-	if (type == "bool") {
-		actualType = "bool ";
-	}
-	if (type == "void") {
-		actualType = "void ";
-	}
-	ret.append(actualType + name + " = " + val);
+	else
+		actualType = type;
+
+	ret.append(actualType + " " + name + " = " + val);
 	return ret;
 }
 
@@ -68,8 +74,11 @@ int main() {
 	sourceCode = parse2(sourceCode);
 	fileToRead.close();
 
+	/*
 	std::ofstream fileToWrite("debug2.cpp");
 	fileToWrite << sourceCode;
 	fileToWrite.close();
+	*/
+	std::cout << sourceCode;
 }
 
